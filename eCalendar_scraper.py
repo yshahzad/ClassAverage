@@ -38,15 +38,13 @@ def split_instructors_by_season(instructor_string):
     # Regex to match each season's data
     pattern = r'(.*?)\((Fall|Winter|Summer)\)'
 
-    # Find all matches for instructors and seasons
     matches = re.findall(pattern, instructor_string)
 
     season_data = {}
     for i, (instructors, season) in enumerate(matches):
-        instructors = instructors.strip("; ").strip()  # Clean up extra separators
+        instructors = instructors.strip("; ").strip()
         season_data[season] = instructors
 
-        # Check for remaining string after the last match to include "Summer" or leftover data
         if i == len(matches) - 1:
             remaining = instructor_string.split(matches[i][0] + f"({season})")[-1].strip()
             if remaining:
@@ -57,6 +55,9 @@ def split_instructors_by_season(instructor_string):
     #    print(f"{season}: {instructors}")
 
     return season_data
+
+
+
 
 
 

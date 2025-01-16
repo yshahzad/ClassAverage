@@ -35,8 +35,26 @@ def check_term_season(season, seasonal_dict):
 
     return instructor
 
+def split_instructors_list(df, n_instructors):
+    for i in range(n_instructors):
+        df[f"Instructor_{i + 1}"] = None
+
+    for i, row in df.iterrows():
+
+        if not pd.isna(row["Instructor"]):
+            instructors = row["Instructor"].split("; ")
+
+            # Records first 3 instructors per term
+            for j in range(n_instructors):
+                if j < len(instructors):
+                    df.loc[i, f"Instructor_{j + 1}"] = instructors[j]
+
+    return df
 
 data = pd.read_csv("data/classAvgs_W2024.csv").drop(0)
+
+#IMPORTANT: DEFINE SUBJECT CODE BELOW
+subject = "MATH"
 
 subjectCodes = []
 for course in data["Course"]:
@@ -45,12 +63,10 @@ for course in data["Course"]:
 
 data["SubjectCode"] = subjectCodes
 
-#print(subjectCodes)
-
-classAvgs = data.filter(items = ["Course", "TermName", "ClassAveLetter", "SubjectCode"])
+classAvgs = data.filter(items = ["Course", "TermName", "ClassAveLetter", "ClassAveNum", "SubjectCode"])
 
 #Filters classes for certain subjects. REMOVE BEFORE FINAL ANALYSIS!
-classAvgs = classAvgs.loc[classAvgs["SubjectCode"].isin(["MATH"])]
+classAvgs = classAvgs.loc[classAvgs["SubjectCode"].isin([subject])]
 
 print(classAvgs.head(15))
 
@@ -83,9 +99,6 @@ for i, row in classAvgs.iterrows():
 
 classAvgs["Instructor"] = instructors
 
-classAvgs.to_csv("MATH_classes.csv")
+classAvgByProf = split_instructors_list(classAvgs, n_instructors=4)
 
-
-
-
-
+classAvgByProf.to_csv(f"{subject.lower()}_classes_byProf.csv")

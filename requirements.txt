@@ -1,6 +1,4 @@
 pandas
 streamlit
 plotly
-BeautifulSoup
-requests
 numpy

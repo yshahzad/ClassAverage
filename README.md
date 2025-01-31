@@ -1,1 +1,1 @@
-This is a personal project that aims to predict class averages at McGill University based on various data. More to come soon :)
+This is a personal project that offers McGill students an interactive dashboard to help them build an informed degree plan and semester schedule.

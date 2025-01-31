@@ -1,6 +1,6 @@
 pandas
 streamlit
-plotly.express
+plotly
 BeautifulSoup
 requests
 numpy

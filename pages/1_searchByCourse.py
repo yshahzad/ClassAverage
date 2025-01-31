@@ -32,7 +32,7 @@ data = pd.read_csv(DATA_FILE)
 df = data.filter(items = ["Course", "TermName", "ClassAveLetter", "ClassAveNum", "Instructor_1", "Instructor_2",
                           "Instructor_3"])
 
-course_name = st.text_input("Enter course code: (e.g. 'MATH558')")
+course_name = st.text_input("Enter course code: (e.g. 'MATH314')")
 course_name = "".join(course_name.split()).upper()
 courseOverTime = df[df['Course'] == course_name]
 
@@ -49,14 +49,6 @@ if course_name == "":
     col1, col2 = st.columns([0.5, 0.5])
 
     with col1:
-        # DEPARTMENTS PIE CHART
-        fig = px.pie(courseCodes_count, values='Count', names='SubjectCode', title=
-            f"Departments Represented:")
-        #color_discrete_sequence=px.colors.sequential.amp_r
-
-        st.plotly_chart(fig, theme=None, use_container_width=False)
-
-    with col2:
         col11, col12 = st.columns([0.5, 0.5])
 
         with col11:
@@ -66,6 +58,15 @@ if course_name == "":
         with col12:
             st.metric(label="Terms Represented:",
                   value=data.groupby('TermName').size().reset_index(name='Count').shape[0])
+        
+        # DEPARTMENTS PIE CHART
+        fig = px.pie(courseCodes_count, values='Count', names='SubjectCode', title=
+            f"Departments Represented:")
+        #color_discrete_sequence=px.colors.sequential.amp_r
+
+        st.plotly_chart(fig, theme=None, use_container_width=False)
+
+    with col2:
 
         summary = data.groupby(['TermName', 'SubjectCode'])['ClassAveNum'].mean().reset_index()
 
@@ -81,8 +82,6 @@ if course_name == "":
 
         #GRADES OVER TIME BAR CHART
 
-        st.divider()
-        
         st.write("**Departmental Mean Class Average by Year:**")
         courses_bar = st.multiselect(label="Choose department(s):", options=data['SubjectCode'].unique(), 
                        default=data['SubjectCode'].unique()[0])
@@ -132,9 +131,6 @@ else:
 
         st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    # COURSE AVERAGE OVER TIME
-    # st.write("Course Average over Time")
-    # st.bar_chart(courseOverTime, x="TermName", y="ClassAveNum", x_label="Term", y_label="Average GPA Points")
 
     # COURSE AVERAGE BY PROF
     courseAveByProf = courseOverTime.groupby('Instructor_1')['ClassAveNum'].mean().reset_index()
@@ -145,8 +141,6 @@ else:
 
     #TODO: Fix the sort feature of the grades by prof chart
     sortedCourseAveByProf = courseAveByProf.sort_values(by="ClassAveNum", ascending=False)
-
-    st.write(sortedCourseAveByProf)
 
     with col2:
         fig = px.bar(sortedCourseAveByProf, x='Instructor_1', y='ClassAveNum',
@@ -162,13 +156,3 @@ else:
 
         st.bar_chart(sort_df_by_term(courseOverTime).sort_values("TermName"), x="TermName", y="ClassAveNum", x_label="Term", y_label="Average GPA Points",
                      color="#8B0000")
-
-        st.write(courseOverTime.sort_values("TermName"))
-
-        st.write(sort_df_by_term(courseOverTime))
-
-    #Build out courses page first
-
-
-
-

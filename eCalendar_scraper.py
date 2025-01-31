@@ -7,13 +7,12 @@ def scrape_instructor(url):
     response = requests.get(url)
 
     # Check if the request was successful
-    if response.status_code == 200:
-        html_content = response.text
-    else:
-        print(f"Failed to fetch webpage. Status code: {response.status_code}")
-        exit()
 
-    # Parse the HTML
+    if response.status_code != 200:
+        print(f"Failed to fetch webpage. Status code: {response.status_code}")
+        return None
+
+    html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
 
     # Scrapes instructor names
@@ -23,11 +22,10 @@ def scrape_instructor(url):
         raw_text = instructor_tag.text.strip()
         # Remove the "Instructors:" prefix
         instructors = raw_text.removeprefix("Instructors: ").strip()
-        #print(f"Instructors: {instructors}")
+
     else:
         print("Instructors' information not found.")
         #instructors = np.nan
-
     return instructors
 
 def split_instructors_by_season(instructor_string):
@@ -55,13 +53,5 @@ def split_instructors_by_season(instructor_string):
     #    print(f"{season}: {instructors}")
 
     return season_data
-
-
-
-
-
-
-
-
 
 

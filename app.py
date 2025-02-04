@@ -22,7 +22,7 @@ with col1:
 
 with col2:
 
-    st.page_link("app.py", label="Search By Prof (currently under construction)")
+    st.page_link("pages/2_searchByProf.py", label="Search By Prof (under construction)")
 
 
 
